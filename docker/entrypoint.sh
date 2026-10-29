@@ -8,16 +8,15 @@ if [ ! -f vendor/autoload.php ]; then
     composer install --no-interaction --no-progress
 fi
 
-# The app can't run without an encryption key. It's stored in .env, so it
-# has to be generated on your machine, not inside the container.
-if [ -z "$APP_KEY" ]; then
+# The app can't run without an encryption key, kept in .env on your machine.
+if ! grep -qE '^APP_KEY=.+' .env 2>/dev/null; then
     echo "APP_KEY is empty. Run this, then paste the result into APP_KEY in .env:"
     echo "  docker compose run --rm app php artisan key:generate --show"
     exit 1
 fi
 
 # Wait for PostgreSQL to accept connections.
-until php -r 'new PDO("pgsql:host=".getenv("DB_HOST").";port=".getenv("DB_PORT").";dbname=".getenv("DB_DATABASE"), getenv("DB_USERNAME"), getenv("DB_PASSWORD"));' 2>/dev/null; do
+until php artisan db:show > /dev/null 2>&1; do
     echo "Waiting for the database..."
     sleep 2
 done

@@ -10,7 +10,9 @@ services:
   # The web app.
   app:
     build: .
-    env_file: .env
+    # Laravel reads .env from the mounted code, the same as outside Docker.
+    # It isn't passed in as environment variables, so test settings in
+    # phpunit.xml can take precedence over it.
     environment:
       RUN_MIGRATIONS: "true"
     # Run as your own user, so files the app writes (logs, caches) belong to you.
@@ -26,7 +28,6 @@ services:
   # Background jobs, such as sending texts.
   worker:
     build: .
-    env_file: .env
     user: "${DUTYBOARD_UID:-1000}:${DUTYBOARD_GID:-1000}"
     volumes:
       - .:/var/www/html
