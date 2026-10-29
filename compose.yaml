@@ -1,0 +1,56 @@
+# DutyBoard for development. Start it with:
+#
+#   cp .env.example .env
+#   docker compose run --rm app php artisan key:generate --show   # paste into APP_KEY in .env
+#   docker compose up
+#
+# Then open http://localhost:8080. See CONTRIBUTING.md for the rest.
+
+services:
+  # The web app.
+  app:
+    build: .
+    # Laravel reads .env from the mounted code, the same as outside Docker.
+    # It isn't passed in as environment variables, so test settings in
+    # phpunit.xml can take precedence over it.
+    environment:
+      RUN_MIGRATIONS: "true"
+    # Run as your own user, so files the app writes (logs, caches) belong to you.
+    user: "${DUTYBOARD_UID:-1000}:${DUTYBOARD_GID:-1000}"
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8080:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Background jobs, such as sending texts.
+  worker:
+    build: .
+    user: "${DUTYBOARD_UID:-1000}:${DUTYBOARD_GID:-1000}"
+    volumes:
+      - .:/var/www/html
+    command: ["php", "artisan", "queue:work", "--tries=3"]
+    depends_on:
+      app:
+        condition: service_started
+
+  # The database. Its data lives in the postgres-data volume, so it survives restarts.
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-dutyboard}
+      POSTGRES_USER: ${DB_USERNAME:-dutyboard}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-dutyboard}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/postgres:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-dutyboard} -d ${DB_DATABASE:-dutyboard}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres-data:

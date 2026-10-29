@@ -9,6 +9,7 @@ Short notes on choices that shaped DutyBoard, and why they were made. They save 
 | [0003](0003-one-install-per-agency.md) | One install per agency, on the agency's server | Accepted |
 | [0004](0004-sms-only-one-way.md) | Notifications by one-way SMS only | Accepted |
 | [0005](0005-no-patient-data.md) | Never store patient information | Accepted |
+| [0006](0006-sign-in-with-username.md) | Sign in with a username, not an email address | Accepted |
 
 ## Adding one
 

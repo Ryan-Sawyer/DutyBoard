@@ -19,11 +19,20 @@ You need Docker and git. You don't need PHP, Composer, Node, or a database insta
 git clone https://github.com/Ryan-Sawyer/DutyBoard.git
 cd DutyBoard
 cp .env.example .env
+docker compose run --rm app php artisan key:generate --show   # paste the result into APP_KEY in .env
 docker compose up -d
-docker compose exec app php artisan migrate --seed
+docker compose exec app php artisan db:seed
 ```
 
-Open http://localhost:8080 and sign in as one of the sample users listed in the seeder (`database/seeders/`).
+The app container installs PHP packages and applies database changes each time it starts. Open http://localhost:8080 and sign in as one of the sample users in `database/seeders/SampleAgencySeeder.php`. Every sample password is `dutyboard`.
+
+On Linux, if your user ID isn't 1000, set `DUTYBOARD_UID` and `DUTYBOARD_GID` in `.env` (see `.env.example`).
+
+To start over with fresh sample data:
+
+```bash
+docker compose exec app php artisan migrate:fresh --seed
+```
 
 Run any Laravel command inside the app container:
 
@@ -36,6 +45,8 @@ docker compose exec app php artisan <command>
 ```bash
 docker compose exec app php artisan test
 ```
+
+Tests run against PostgreSQL, the same as production, in their own `dutyboard_test` database. The postgres container creates it the first time it starts, so running tests never touches your sample data.
 
 Every acceptance criterion in the scope has a test named after it, for example `test_a5_fail_without_note_cannot_be_submitted`. If you change behavior, update or add the matching test. A pull request with failing tests won't be merged.
 
