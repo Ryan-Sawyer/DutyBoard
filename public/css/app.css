@@ -1,0 +1,162 @@
+/*
+ * DutyBoard styles. Plain CSS with no build step: edit this file and reload.
+ *
+ * Colors are tokens on :root (light theme), redefined for dark mode below.
+ * Use the tokens in rules, never raw colors, so both themes stay readable.
+ */
+
+:root {
+  --ink: #16213a;        /* main text */
+  --ink-2: #4a5568;      /* secondary text */
+  --muted: #6b7486;      /* hints and labels */
+  --bg: #f3f4f6;         /* page background */
+  --card: #ffffff;       /* cards and inputs */
+  --line: #e2e6ec;       /* borders */
+  --control: #c4ccd8;    /* input borders */
+  --header: #16213a;     /* top bar, stays dark in both themes */
+  --solid: #16213a;      /* dark buttons */
+  --on-solid: #ffffff;
+  --red: #c62828;  --red-bg: #fdecec;
+  --amber: #b45309; --amber-bg: #fef3c7;
+  --green: #2f7d4f; --green-bg: #e6f4ea;
+  --blue: #1d4ed8; --blue-bg: #e8efff;
+  --radius: 10px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #e6e9f0; --ink-2: #b4bccb; --muted: #8f99ab;
+    --bg: #0f1420; --card: #171e2c; --line: #283246; --control: #3a4560;
+    --header: #0a0e17; --solid: #e6e9f0; --on-solid: #0f1420;
+    --red: #ef5350; --red-bg: #3a1a1c;
+    --amber: #f5a524; --amber-bg: #3a2a0c;
+    --green: #4fbf80; --green-bg: #15301f;
+    --blue: #8aabff; --blue-bg: #1a2544;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+a { color: var(--blue); }
+
+/* ---------- Top bar ---------- */
+
+.topbar {
+  background: var(--header);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 16px;
+  min-height: 56px;
+  flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; color: #fff; text-decoration: none; }
+.brand-mark { width: 30px; height: 30px; border-radius: 7px; background: #c62828; display: grid; place-items: center; }
+.nav { display: flex; gap: 2px; flex: 1; overflow-x: auto; }
+.nav a { color: #c9d1e3; text-decoration: none; font-size: 14px; padding: 8px 12px; border-radius: 7px; white-space: nowrap; }
+.nav a[aria-current="page"] { background: rgba(255, 255, 255, .14); color: #fff; }
+.who { font-size: 13px; text-align: right; line-height: 1.3; }
+.who span { opacity: .7; }
+.who form { display: inline; }
+.link-button { background: none; border: 0; color: #c9d1e3; font: inherit; font-size: 13px; cursor: pointer; padding: 0; text-decoration: underline; }
+
+/* ---------- Page ---------- */
+
+main { max-width: 1000px; margin: 0 auto; padding: 20px 16px 48px; }
+main.narrow { max-width: 420px; padding-top: 48px; }
+h1 { font-size: 22px; margin: 0 0 4px; text-wrap: balance; }
+h2 { font-size: 16px; margin: 0 0 12px; }
+.sub { color: var(--muted); margin: 0 0 18px; }
+.hint { font-size: 13px; color: var(--muted); }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.spacer { flex: 1; }
+.stack { display: grid; gap: 16px; }
+
+/* ---------- Messages ---------- */
+
+.notice { border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 14px; }
+.notice.success { background: var(--green-bg); color: var(--green); }
+.notice.error { background: var(--red-bg); color: var(--red); }
+.notice.warning { background: var(--amber-bg); color: var(--amber); }
+.field-error { color: var(--red); font-size: 13px; font-weight: 600; margin-top: 4px; }
+
+/* ---------- Forms ---------- */
+
+label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-2); margin-bottom: 12px; }
+input, select, textarea {
+  display: block; width: 100%; margin-top: 4px;
+  font: inherit; padding: 9px 10px;
+  border: 1px solid var(--control); border-radius: 8px;
+  background: var(--card); color: var(--ink);
+}
+input:focus-visible, select:focus-visible, textarea:focus-visible, .button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--blue); outline-offset: 2px;
+}
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+.code-input { font-size: 22px; letter-spacing: 6px; text-align: center; font-variant-numeric: tabular-nums; }
+
+.button {
+  display: inline-block; font: inherit; font-weight: 600; text-decoration: none;
+  border: 1px solid var(--control); background: var(--card); color: var(--ink);
+  padding: 9px 14px; border-radius: 8px; cursor: pointer;
+}
+.button.primary { background: #c62828; border-color: #c62828; color: #fff; }
+.button.dark { background: var(--solid); border-color: var(--solid); color: var(--on-solid); }
+.button.small { padding: 5px 10px; font-size: 13px; }
+.button.full { width: 100%; padding: 13px; font-size: 16px; }
+
+/* ---------- Tables and tags ---------- */
+
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .4px; border-bottom: 1px solid var(--line); padding: 8px; }
+td { border-bottom: 1px solid var(--line); padding: 10px 8px; vertical-align: middle; }
+td.actions { text-align: right; white-space: nowrap; }
+td.actions form { display: inline; }
+tr.inactive td { color: var(--muted); }
+
+.tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 99px; background: var(--line); color: var(--ink-2); white-space: nowrap; }
+.tag.red { background: var(--red-bg); color: var(--red); }
+.tag.amber { background: var(--amber-bg); color: var(--amber); }
+.tag.green { background: var(--green-bg); color: var(--green); }
+.tag.blue { background: var(--blue-bg); color: var(--blue); }
+
+.list-item { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.list-item:last-child { border-bottom: 0; }
+
+/* Two-step sign-in setup */
+.qr { background: #fff; padding: 12px; border-radius: 8px; display: inline-block; }
+.qr svg { display: block; width: 180px; height: 180px; }
+.recovery-codes { font: 14px/1.8 ui-monospace, Menlo, Consolas, monospace; background: var(--bg); padding: 12px 16px; border-radius: 8px; columns: 2; }
+
+/* ---------- Phone width ---------- */
+
+.show-on-phone { display: none; }
+
+@media (max-width: 640px) {
+  .two { grid-template-columns: 1fr; }
+  /* Brand and name on the first row, navigation on its own row below. */
+  .topbar { gap: 8px 16px; padding-top: 8px; }
+  .who { flex: 1; }
+  .nav { order: 3; flex-basis: 100%; margin: 0 -8px; padding-bottom: 6px; }
+  .hide-on-phone { display: none; }
+  .show-on-phone { display: block; }
+  td.actions { white-space: normal; }
+  td.actions .button { display: block; width: 100%; margin: 3px 0; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

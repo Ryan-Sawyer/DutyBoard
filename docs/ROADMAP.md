@@ -8,16 +8,18 @@ The acceptance criteria (A1–A23) come from the MVP scope written for Atoka Cou
 
 The first slice sets the structure everything else follows.
 
-- [ ] Laravel and Livewire project, Docker Compose (app, worker, PostgreSQL, Caddy), `.env.example`
-- [ ] Sample data seeder: one agency, one station, three units, 48/96 rotation, a dozen made-up staff
-- [ ] Sign-in, two-step sign-in, and roles: Crew, Supervisor, Administrator (A1, A2)
-- [ ] Administrator manages users and units, including deactivating users and taking units out of service (A1, A3)
+- [x] Laravel project and development containers (app, worker, PostgreSQL), `.env.example`
+- [ ] Production containers: PHP-FPM behind Caddy with HTTPS
+- [x] Sample data seeder: one station, three units, a dozen made-up staff (rotation comes with scheduling)
+- [x] Sign-in, two-step sign-in, and roles: Crew, Supervisor, Administrator (A1, A2)
+- [x] Administrator manages people, including deactivating them and resetting passwords (A1)
+- [ ] Administrator manages units, including taking them out of service (A3)
 - [ ] Checklist templates with versions (A4)
 - [ ] Crew completes and submits a truck check from a phone. A Fail needs a note (A5)
 - [ ] Supervisor reviews deficiencies with a note (A6)
-- [ ] Audit log for everything above (A12)
+- [x] Audit log, append-only (A12, for what's built so far)
 - [ ] Runs from the published image and compose file over HTTPS (A13)
-- [ ] CI: tests, Pint, and `composer audit` on every pull request
+- [x] CI: tests on PostgreSQL, Pint, `composer audit`, and a container start-up check on every pull request
 - [ ] Docs: install guide, admin guide for this slice, architecture updated
 
 ## Slice 2: Run mileage and reports

@@ -24,12 +24,14 @@ You need [Docker](https://docs.docker.com/get-docker/) and git. Nothing else.
 git clone https://github.com/Ryan-Sawyer/DutyBoard.git
 cd DutyBoard
 cp .env.example .env
-docker compose up
+docker compose run --rm app php artisan key:generate --show   # paste the result into APP_KEY in .env
+docker compose up -d
+docker compose exec app php artisan db:seed                   # load made-up sample data
 ```
 
-Then open http://localhost:8080. The app starts with made-up sample data: a small agency with three units, a 48/96 rotation, and staff you can sign in as. Texts are written to a log file instead of being sent.
+Then open http://localhost:8080 and sign in as `dwhitfield` (administrator), `tellis` (supervisor), or `jalvarez` (crew). Every sample account's password is `dutyboard`. The sample agency has one station, three units, and a dozen made-up staff.
 
-> These commands will work once the first slice lands. Until then, the repo holds the docs that describe how it will be built.
+The first run takes a few minutes while it installs PHP packages.
 
 ## Documentation
 
